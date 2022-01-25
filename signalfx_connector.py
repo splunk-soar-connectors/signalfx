@@ -415,9 +415,9 @@ class SignalfxConnector(BaseConnector):
 
 def main():
     import argparse
+    import sys
 
     import pudb
-    import sys
 
     pudb.set_trace()
 
