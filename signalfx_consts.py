@@ -28,3 +28,5 @@ NON_NEGATIVE_INTEGER_MSG = "Please provide a valid non-negative integer value in
 # page size
 PAGE_SIZE = 100
 LIMIT_PARAM_KEY = "'limit' action parameter"
+
+DEFAULT_TIMEOUT = 30
