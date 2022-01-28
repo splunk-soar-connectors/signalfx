@@ -27,7 +27,7 @@
     "utctime_updated": "2022-01-26T17:34:35.000000Z",
     "package_name": "phantom_signalfx",
     "main_module": "signalfx_connector.py",
-    "min_phantom_version": "4.9.39220",
+    "min_phantom_version": "5.1.0",
     "app_wizard_version": "1.0.0",
     "configuration": {
         "base_url": {
