@@ -2,16 +2,16 @@
 # SignalFx
 
 Publisher: Splunk  
-Connector Version: 1\.0\.5  
+Connector Version: 1\.0\.8  
 Product Vendor: Splunk  
 Product Name: SignalFx  
 Product Version Supported (regex): "\.\*"  
-Minimum Product Version: 4\.9\.39220  
+Minimum Product Version: 5\.1\.0  
 
 This App uses the Splunk Infrastructure Monitoring \(SignalFx\) API to retrieve and send data
 
-[comment]: # " File: readme.md"
-[comment]: # "  Copyright (c) 2021 Splunk Inc."
+[comment]: # " File: README.md"
+[comment]: # "  Copyright (c) 2021-2022 Splunk Inc."
 [comment]: # ""
 [comment]: # "  Licensed under Apache 2.0 (https://www.apache.org/licenses/LICENSE-2.0.txt)"
 [comment]: # ""
