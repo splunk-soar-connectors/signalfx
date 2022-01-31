@@ -2,7 +2,7 @@
 # SignalFx
 
 Publisher: Splunk  
-Connector Version: 1\.0\.8  
+Connector Version: 1\.0\.9  
 Product Vendor: Splunk  
 Product Name: SignalFx  
 Product Version Supported (regex): "\.\*"  
