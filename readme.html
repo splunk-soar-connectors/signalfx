@@ -17,5 +17,14 @@
           <li>A new entry with the Name you provided appears on the page. Expand it and click on 'Show Token' to get the token</li>
           <li>Copy the generated token and use it in 'Access Token' asset configuration parameter</li>
         </ol>
+      <p><h2>Event Dimensions</h2>
+        <ol>
+          When crafting your Event Dimensions keep in mind:
+          <li>Must be valid JSON</li>
+          <li>curly bracket characters that are not datapath references must be escaped with an additional curly bracket. E.G. { becomes {{</li>
+          <li>spaces in dimension keys are not allowed </li>
+          <br>Example Dimensions Input: {{\"description\":\"{0}\",\"tag\":\"{1}\"}}
+          <br>where {0} and {1} represent datapaths.
+        </ol>  
     </body>
 </html>

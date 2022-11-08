@@ -278,7 +278,12 @@ class SignalfxConnector(BaseConnector):
         headers = self._headers
         dimensions = param.get('dimensions')
         title = param.get('title')
-        dimensions = json.loads(dimensions.replace(" ", ""))
+        
+        try:
+            dimensions = json.loads(dimensions)
+        except Exception as dimensions:
+            error_message = 'Error converting dimensions to JSON %s' % (dimensions)
+            return RetVal(action_result.set_status(phantom.APP_ERROR, error_message), dimensions)
 
         data_blob = [{"category":"Splunk SOAR","eventType":title,"dimensions":dimensions}]
         json_blob = json.dumps(data_blob)
@@ -439,7 +444,7 @@ class SignalfxConnector(BaseConnector):
 
         # get the asset config
         config = self.get_config()
-        
+
         self._base_url = config['base_url'].strip("/")  # myNote: get from siglalfx.json
         self._token = config['token']
         self._headers = {
