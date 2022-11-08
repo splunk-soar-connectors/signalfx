@@ -20,11 +20,14 @@
         },
         {
             "name": "Angelo Brancato"
+        },
+        {
+            "name": "Jeremy Hicks"
         }
     ],
     "license": "Copyright (c) 2021-2022 Splunk Inc.",
-    "app_version": "1.0.9",
-    "utctime_updated": "2022-01-31T19:47:39.000000Z",
+    "app_version": "1.0.10",
+    "utctime_updated": "2022-11-08T19:47:39.000000Z",
     "package_name": "phantom_signalfx",
     "main_module": "signalfx_connector.py",
     "min_phantom_version": "5.1.0",
@@ -437,6 +440,35 @@
                     ]
                 }
             ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "observability event",
+            "identifier": "observability_event",
+            "description": "POST an event to Splunk observability containing any selected fields from SOAR",
+            "verbose": "",
+            "type": "generic",
+            "read_only": false,
+            "parameters": {
+                "title": {
+                    "description": "Title of your Splunk Observability Event",
+                    "data_type": "string",
+                    "order": 1,
+                    "required": true,
+                    "name": "title"
+                },
+                "dimensions": {
+                    "description": "Dictionary of strings defining event definitions. Whitespace will be stripped. (E.G. {{\"description\":\"{0}\",\"tag\":\"{1}\"}} where {0} and {1} represent datapaths)",
+                    "data_type": "string",
+                    "order": 1,
+                    "required": false,
+                    "name": "dimensions"
+                }
+            },
+            "output": [],
             "render": {
                 "type": "table"
             },
