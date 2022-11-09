@@ -446,9 +446,9 @@
             "versions": "EQ(*)"
         },
         {
-            "action": "observability event",
+            "action": "create observability event",
             "identifier": "observability_event",
-            "description": "POST an event to Splunk observability containing any selected fields from SOAR",
+            "description": "POST an event to Splunk observability containing any selected fields from SOAR.",
             "verbose": "",
             "type": "generic",
             "read_only": false,
@@ -468,7 +468,46 @@
                     "name": "dimensions"
                 }
             },
-            "output": [],
+            "output": [
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string",
+                    "contains": [
+                        "signalfx data"
+                    ]
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 1,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Total results: 1"
+                    ]
+                },
+                                                                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }                
+            ],
             "render": {
                 "type": "table"
             },
