@@ -183,14 +183,14 @@ class SignalfxConnector(BaseConnector):
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
     def _make_rest_call(self, endpoint, action_result, method="get", **kwargs):
-        # **kwargs can be any additional parameters that requests.request accepts 
+        # **kwargs can be any additional parameters that requests.request accepts
 
         config = self.get_config()
-      
+
         resp_json = None
 
         try:
-            request_func = getattr(requests, method)       
+            request_func = getattr(requests, method)
         except AttributeError:
             return RetVal(
                 action_result.set_status(phantom.APP_ERROR, "Invalid method: {0}".format(method)),
@@ -269,16 +269,16 @@ class SignalfxConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    def _handle_observability_event(self, param):        
+    def _handle_observability_event(self, param):
         # Implement the handler here
         # use self.save_progress(...) to send progress messages back to the platform
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        
+
         config = self.get_config()
         headers = self._headers
         dimensions = param.get('dimensions')
         title = param.get('title')
-        
+
         try:
             dimensions = json.loads(dimensions)
         except Exception as dimensions:
@@ -287,27 +287,27 @@ class SignalfxConnector(BaseConnector):
 
         data_blob = [{"category":"Splunk SOAR","eventType":title,"dimensions":dimensions}]
         json_blob = json.dumps(data_blob)
-        
-        # Show request body for easier troubleshooting 
+
+        # Show request body for easier troubleshooting
         self.save_progress("Request body: " + str(json_blob))
-        
+
         # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         # make rest call
         ret_val, response = self._make_rest_call(
             '/v2/event', action_result, method="post", headers=headers, data=json_blob
-        )      
+        )
 
-        if phantom.is_fail(ret_val): 
+        if phantom.is_fail(ret_val):
             return action_result.get_status()
-        
+
         action_result.add_data(response)
-        
+
         if response == "OK":
             self.save_progress("Observability Event Sent!")
-            return action_result.set_status(phantom.APP_SUCCESS)   
-    
+            return action_result.set_status(phantom.APP_SUCCESS)
+
     def _handle_clear_incident(self, param):
 
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
@@ -323,6 +323,9 @@ class SignalfxConnector(BaseConnector):
             return action_result.get_status()
 
         action_result.add_data(response)
+        
+        summary = action_result.update_summary({})
+        summary['total_results'] = response.get('count', 0)
 
         return action_result.set_status(phantom.APP_SUCCESS, "Resolved Incident successfully")
 
@@ -425,7 +428,7 @@ class SignalfxConnector(BaseConnector):
             ret_val = self._handle_run_query(param)
 
         elif action_id == 'observability_event':
-            ret_val = self._handle_observability_event(param)            
+            ret_val = self._handle_observability_event(param)
 
         elif action_id == 'clear_incident':
             ret_val = self._handle_clear_incident(param)
@@ -449,8 +452,8 @@ class SignalfxConnector(BaseConnector):
         self._token = config['token']
         self._headers = {
             'X-SF-TOKEN': self._token
-        } 
-        return phantom.APP_SUCCESS  
+        }
+        return phantom.APP_SUCCESS
 
     def finalize(self):
         # Save the state, this data is saved across actions and app upgrades
@@ -464,7 +467,7 @@ def main():
 
     import pudb
 
-    pudb.set_trace()   
+    pudb.set_trace()
 
     argparser = argparse.ArgumentParser()
 
@@ -509,7 +512,7 @@ def main():
         except Exception as e:
             print("Unable to get session id from the platform. Error: " + str(e))
             sys.exit(1)
-             
+
     with open(args.input_test_json) as f:
         in_json = f.read()
         in_json = json.loads(in_json)
