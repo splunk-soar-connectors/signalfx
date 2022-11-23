@@ -51,34 +51,31 @@ class SignalfxConnector(BaseConnector):
         self._base_url = None
 
     def _get_error_message_from_exception(self, e):
-        """ This method is used to get appropriate error messages from the exception.
+        """
+        Get appropriate error message from the exception.
         :param e: Exception object
         :return: error message
         """
 
+        error_code = None
+        error_msg = ERROR_MSG_UNAVAILABLE
+
+        self.error_print("Error occurred.", e)
+
         try:
-            if e.args:
+            if hasattr(e, "args"):
                 if len(e.args) > 1:
                     error_code = e.args[0]
                     error_msg = e.args[1]
                 elif len(e.args) == 1:
-                    error_code = ERR_CODE_MSG
                     error_msg = e.args[0]
-            else:
-                error_code = ERR_CODE_MSG
-                error_msg = ERR_MSG_UNAVAILABLE
-        except:
-            error_code = ERR_CODE_MSG
-            error_msg = ERR_MSG_UNAVAILABLE
+        except Exception as e:
+            self.error_print("Error occurred while fetching exception information. Details: {}".format(str(e)))
 
-        try:
-            if error_code in ERR_CODE_MSG:
-                error_text = "Error Message: {0}".format(error_msg)
-            else:
-                error_text = "Error Code: {0}. Error Message: {1}".format(error_code, error_msg)
-        except:
-            self.debug_print(PARSE_ERR_MSG)
-            error_text = PARSE_ERR_MSG
+        if not error_code:
+            error_text = "Error Message: {}".format(error_msg)
+        else:
+            error_text = "Error Code: {}. Error Message: {}".format(error_code, error_msg)
 
         return error_text
 
@@ -134,8 +131,8 @@ class SignalfxConnector(BaseConnector):
         try:
             resp_json = r.json()
         except Exception as e:
-            err = self._get_error_message_from_exception(e)
-            error_message = "Unable to parse JSON response. Error: {0}".format(err)
+            error_text = self._get_error_message_from_exception(e)
+            error_message = "Unable to parse JSON response. Error: {0}".format(error_text)
             return RetVal(action_result.set_status(phantom.APP_ERROR, error_message), None)
 
         # Please specify the status codes here
@@ -219,8 +216,8 @@ class SignalfxConnector(BaseConnector):
             error_message = 'Error Details: Connection refused from the server for URL: %s' % (url)
             return RetVal(action_result.set_status(phantom.APP_ERROR, error_message), resp_json)
         except Exception as e:
-            err = self._get_error_message_from_exception(e)
-            error_message = "Error Connecting to server. {0}".format(err)
+            error_text = self._get_error_message_from_exception(e)
+            error_message = "Error Connecting to server. {0}".format(error_text)
             return RetVal(action_result.set_status(phantom.APP_ERROR, error_message), resp_json)
 
         return self._process_response(r, action_result)
@@ -274,25 +271,24 @@ class SignalfxConnector(BaseConnector):
         # use self.save_progress(...) to send progress messages back to the platform
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
 
-        config = self.get_config()
         headers = self._headers
         dimensions = param.get('dimensions')
         title = param.get('title')
 
+        # Add an action result object to self (BaseConnector) to represent the action for this param
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
         try:
             dimensions = json.loads(dimensions)
         except Exception as dimensions:
-            error_message = 'Error converting dimensions to JSON %s' % (dimensions)
+            error_message = 'Error converting dimensions to JSON. {}'.format(dimensions)
             return RetVal(action_result.set_status(phantom.APP_ERROR, error_message), dimensions)
 
-        data_blob = [{"category":"Splunk SOAR","eventType":title,"dimensions":dimensions}]
+        data_blob = [{"category": "Splunk SOAR", "eventType": title, "dimensions": dimensions}]
         json_blob = json.dumps(data_blob)
 
         # Show request body for easier troubleshooting
         self.save_progress("Request body: " + str(json_blob))
-
-        # Add an action result object to self (BaseConnector) to represent the action for this param
-        action_result = self.add_action_result(ActionResult(dict(param)))
 
         # make rest call
         ret_val, response = self._make_rest_call(
@@ -306,7 +302,7 @@ class SignalfxConnector(BaseConnector):
 
         if response == "OK":
             self.save_progress("Observability Event Sent!")
-            return action_result.set_status(phantom.APP_SUCCESS)
+            return action_result.set_status(phantom.APP_SUCCESS, "Observability Event Sent!")
 
     def _handle_clear_incident(self, param):
 
@@ -323,7 +319,7 @@ class SignalfxConnector(BaseConnector):
             return action_result.get_status()
 
         action_result.add_data(response)
-        
+
         summary = action_result.update_summary({})
         summary['total_results'] = response.get('count', 0)
 
@@ -404,8 +400,8 @@ class SignalfxConnector(BaseConnector):
                 count = len(incident_list)
                 action_result.update_data(incident_list)
         except Exception as e:
-            err = self._get_error_message_from_exception(e)
-            error_msg = "Failed to parse the response data. {}".format(err)
+            error_text = self._get_error_message_from_exception(e)
+            error_msg = "Failed to parse the response data. {}".format(error_text)
             return action_result.set_status(phantom.APP_ERROR, error_msg)
 
         summary = action_result.update_summary({})
