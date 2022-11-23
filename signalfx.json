@@ -475,7 +475,7 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.parameter.dimentions",
+                    "data_path": "action_result.parameter.dimensions",
                     "data_type": "string",
                     "example_values": [
                         "{\"description\": \"test description\", \"tag\": \"test\"}"
@@ -492,7 +492,7 @@
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "column_name": "Status",
-                    "column_order": 1,
+                    "column_order": 0,
                     "example_values": [
                         "success",
                         "failed"
