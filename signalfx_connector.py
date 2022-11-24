@@ -320,9 +320,6 @@ class SignalfxConnector(BaseConnector):
 
         action_result.add_data(response)
 
-        summary = action_result.update_summary({})
-        summary['total_results'] = response.get('count', 0)
-
         return action_result.set_status(phantom.APP_SUCCESS, "Resolved Incident successfully")
 
     def _handle_get_incident(self, param):

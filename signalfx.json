@@ -579,10 +579,6 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.summary.total_results",
-                    "data_type": "numeric"
-                },
-                {
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "column_name": "Status",
