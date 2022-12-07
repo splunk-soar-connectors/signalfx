@@ -279,12 +279,14 @@ class SignalfxConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         try:
-            dimensions = json.loads(dimensions)
+            data_blob = [{"category": "Splunk SOAR", "eventType": title}]
+            if dimensions:
+                dimensions = json.loads(dimensions)
+                data_blob[0]["dimensions"] = dimensions
         except Exception as dimensions:
             error_message = 'Error converting dimensions to JSON. {}'.format(dimensions)
             return RetVal(action_result.set_status(phantom.APP_ERROR, error_message), dimensions)
 
-        data_blob = [{"category": "Splunk SOAR", "eventType": title, "dimensions": dimensions}]
         json_blob = json.dumps(data_blob)
 
         # Show request body for easier troubleshooting
