@@ -12,7 +12,7 @@
     "product_version_regex": ".*",
     "publisher": "Splunk",
     "latest_tested_versions": [
-        "Cloud, API api.eu0.signalfx.com, November 22, 2022"
+        "Cloud, API api.us2.signalfx.com, November 22, 2022"
     ],
     "contributors": [
         {
@@ -460,7 +460,7 @@
                     "name": "title"
                 },
                 "dimensions": {
-                    "description": "Dictionary of strings defining event definitions. Whitespace will be stripped. (E.G. {{\"description\":\"{0}\",\"tag\":\"{1}\"}} where {0} and {1} represent datapaths)",
+                    "description": "A set of key-value pairs defining event definitions. (E.G. {\"description\":\"This is test\",\"tag\":\"test\"}",
                     "data_type": "string",
                     "order": 1,
                     "name": "dimensions"

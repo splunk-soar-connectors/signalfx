@@ -18,13 +18,21 @@
           <li>Copy the generated token and use it in 'Access Token' asset configuration parameter</li>
         </ol>
       <p><h2>Event Dimensions</h2>
-        <ol>
-          When crafting your Event Dimensions keep in mind:
+        <ul>
+          <li>When crafting your Event Dimensions keep in mind:</li>
+          <ol>
           <li>Must be valid JSON</li>
-          <li>curly bracket characters that are not datapath references must be escaped with an additional curly bracket. E.G. { becomes {{</li>
-          <li>spaces in dimension keys are not allowed </li>
+          <li>When running the action using datapaths in modern playbook, curly bracket characters that are not datapath references must be escaped with an additional curly bracket. E.G. { becomes {{</li>
           <br>Example Dimensions Input: {{\"description\":\"{0}\",\"tag\":\"{1}\"}}
           <br>where {0} and {1} represent datapaths.
         </ol>
+          <li>Dimension key criteria:</li>
+          <ol>
+          <li>Maximum length can be 128 characters</li>
+          <li>Must start with an uppercase or lowercase letter</li>
+          <li>After the first character, the name can contain letters, numbers, underscores (_), and hyphens (-)</li>
+          <li>Spaces in dimension keys are not allowed</li>
+          <li>If the dimension key does not match the criteria then the action may pass but event will not be created on SignalFX portal</li>
+        </ol></ul>
     </body>
 </html>

@@ -212,9 +212,6 @@ class SignalfxConnector(BaseConnector):
         except requests.exceptions.InvalidURL:
             error_message = 'Error connecting to server. Invalid URL %s' % (url)
             return RetVal(action_result.set_status(phantom.APP_ERROR, error_message), resp_json)
-        except requests.exceptions.ConnectionError:
-            error_message = 'Error Details: Connection refused from the server for URL: %s' % (url)
-            return RetVal(action_result.set_status(phantom.APP_ERROR, error_message), resp_json)
         except Exception as e:
             error_text = self._get_error_message_from_exception(e)
             error_message = "Error Connecting to server. {0}".format(error_text)
