@@ -14,8 +14,6 @@
 # and limitations under the License.
 #
 #
-# Python 3 Compatibility imports
-from __future__ import print_function, unicode_literals
 
 import json
 
@@ -84,7 +82,7 @@ class SignalfxConnector(BaseConnector):
             if not float(parameter).is_integer():
                 return action_result.set_status(phantom.APP_ERROR, VALID_INTEGER_MSG.format(key=key)), None
             parameter = int(parameter)
-        except:
+        except Exception:
             return action_result.set_status(phantom.APP_ERROR, VALID_INTEGER_MSG.format(key=key)), None
         if parameter <= 0:
             if allow_zero:
@@ -118,7 +116,7 @@ class SignalfxConnector(BaseConnector):
             split_lines = error_text.split('\n')
             split_lines = [x.strip() for x in split_lines if x.strip()]
             error_text = '\n'.join(split_lines)
-        except:
+        except Exception:
             error_text = "Cannot parse error details"
 
         message = "Status Code: {0}. Data from server:\n{1}\n".format(status_code, error_text)
@@ -207,10 +205,10 @@ class SignalfxConnector(BaseConnector):
                 **kwargs
             )
         except requests.exceptions.InvalidSchema:
-            error_message = 'Error connecting to server. No connection adapters were found for %s' % (url)
+            error_message = 'Error connecting to server. No connection adapters were found for {0}'.format(url)
             return RetVal(action_result.set_status(phantom.APP_ERROR, error_message), resp_json)
         except requests.exceptions.InvalidURL:
-            error_message = 'Error connecting to server. Invalid URL %s' % (url)
+            error_message = 'Error connecting to server. Invalid URL {0}'.format(url)
             return RetVal(action_result.set_status(phantom.APP_ERROR, error_message), resp_json)
         except Exception as e:
             error_text = self._get_error_message_from_exception(e)
@@ -285,7 +283,7 @@ class SignalfxConnector(BaseConnector):
         json_blob = json.dumps(data_blob)
 
         # Show request body for easier troubleshooting
-        self.save_progress("Request body: " + str(json_blob))
+        self.save_progress("Request body: {}".format(str(json_blob)))
 
         # make rest call
         ret_val, response = self._make_rest_call(
@@ -298,8 +296,8 @@ class SignalfxConnector(BaseConnector):
         action_result.add_data(response)
 
         if response == "OK":
-            self.save_progress("Observability Event Sent!")
-            return action_result.set_status(phantom.APP_SUCCESS, "Observability Event Sent!")
+            self.save_progress("Observability event sent")
+            return action_result.set_status(phantom.APP_SUCCESS, "Observability event sent")
 
     def _handle_clear_incident(self, param):
 
@@ -355,7 +353,7 @@ class SignalfxConnector(BaseConnector):
 
             try:
                 incident_list.extend(response)
-            except:
+            except Exception:
                 return RetVal(action_result.set_status(phantom.APP_ERROR, "Failed to parse the response"), None)
 
             if len(incident_list) >= user_limit:
@@ -499,7 +497,7 @@ def main():
             r2 = requests.post(login_url, verify=verify, data=data, headers=headers, timeout=DEFAULT_TIMEOUT)
             session_id = r2.cookies['sessionid']
         except Exception as e:
-            print("Unable to get session id from the platform. Error: " + str(e))
+            print("Unable to get session id from the platform. Error: {}".format(str(e)))
             sys.exit(1)
 
     with open(args.input_test_json) as f:

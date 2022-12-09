@@ -12,7 +12,7 @@
     "product_version_regex": ".*",
     "publisher": "Splunk",
     "latest_tested_versions": [
-        "Cloud, API api.us2.signalfx.com, November 22, 2022"
+        "Cloud, API api.us2.signalfx.com, December 7, 2022"
     ],
     "contributors": [
         {
@@ -83,18 +83,8 @@
                     "example_values": [
                         "aws_region:region_name"
                     ],
-                    "contains": [
-                        "signalfx query"
-                    ],
                     "column_name": "Query",
                     "column_order": 0
-                },
-                {
-                    "data_path": "action_result.data",
-                    "data_type": "string",
-                    "contains": [
-                        "signalfx data"
-                    ]
                 },
                 {
                     "data_path": "action_result.data.*.count",
@@ -460,7 +450,7 @@
                     "name": "title"
                 },
                 "dimensions": {
-                    "description": "A set of key-value pairs defining event definitions. (E.G. {\"description\":\"This is test\",\"tag\":\"test\"}",
+                    "description": "A set of key-value pairs defining event definitions",
                     "data_type": "string",
                     "order": 1,
                     "name": "dimensions"
@@ -483,10 +473,7 @@
                 },
                 {
                     "data_path": "action_result.data",
-                    "data_type": "string",
-                    "contains": [
-                        "signalfx data"
-                    ]
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.status",
@@ -548,20 +535,10 @@
                 {
                     "data_path": "action_result.parameter.incidentid",
                     "data_type": "string",
-                    "contains": [
-                        "signalfx incidentid"
-                    ],
                     "column_name": "Incident ID",
                     "column_order": 0,
                     "example_values": [
                         "Et6d4doAIAg"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data",
-                    "data_type": "string",
-                    "contains": [
-                        "signalfx data"
                     ]
                 },
                 {
@@ -642,9 +619,6 @@
                 {
                     "data_path": "action_result.parameter.incidentid",
                     "data_type": "string",
-                    "contains": [
-                        "signalfx incidentid"
-                    ],
                     "example_values": [
                         "Et6d4doAIAg"
                     ]
@@ -822,13 +796,6 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data",
-                    "data_type": "string",
-                    "contains": [
-                        "signalfx data"
-                    ]
-                },
-                {
                     "data_path": "action_result.data.*.severity",
                     "data_type": "string",
                     "example_values": [
@@ -913,9 +880,6 @@
                 {
                     "data_path": "action_result.data.*.incidentId",
                     "data_type": "string",
-                    "contains": [
-                        "signalfx incidentid"
-                    ],
                     "example_values": [
                         "Et6d4doAIAg"
                     ]
@@ -1056,9 +1020,6 @@
                 {
                     "data_path": "action_result.data.*.events.*.incidentId",
                     "data_type": "string",
-                    "contains": [
-                        "signalfx incidentid"
-                    ],
                     "example_values": [
                         "Et6d4doAIAg"
                     ]
@@ -1127,7 +1088,7 @@
         {
             "action": "list incidents",
             "description": "List all incidents",
-            "verbose": "This action can return incidents up to index 10000.",
+            "verbose": "This action can return incidents up to index 10000. If limit parameter is not provided then 100 will be taken as default value.",
             "type": "investigate",
             "identifier": "list_incidents",
             "read_only": true,
@@ -1156,13 +1117,6 @@
                 {
                     "data_path": "action_result.parameter.limit",
                     "data_type": "numeric"
-                },
-                {
-                    "data_path": "action_result.data",
-                    "data_type": "string",
-                    "contains": [
-                        "signalfx data"
-                    ]
                 },
                 {
                     "data_path": "action_result.data.*.events.*.inputs._S3.key.device",
@@ -1402,9 +1356,6 @@
                 {
                     "data_path": "action_result.data.*.incidentId",
                     "data_type": "string",
-                    "contains": [
-                        "signalfx incidentid"
-                    ],
                     "example_values": [
                         "Et6d4doAIAg"
                     ]
@@ -1620,9 +1571,6 @@
                 {
                     "data_path": "action_result.data.*.events.*.incidentId",
                     "data_type": "string",
-                    "contains": [
-                        "signalfx incidentid"
-                    ],
                     "example_values": [
                         "Et6d4doAIAg"
                     ]
