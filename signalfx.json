@@ -489,7 +489,7 @@
                     "data_path": "action_result.message",
                     "data_type": "string",
                     "example_values": [
-                        "Total results: 1"
+                        "Observability event sent"
                     ]
                 },
                 {
