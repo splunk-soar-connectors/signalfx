@@ -264,7 +264,6 @@ class SignalfxConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_observability_event(self, param):
-        
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
 
         headers = self._headers
