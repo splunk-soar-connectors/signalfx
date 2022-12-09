@@ -264,8 +264,7 @@ class SignalfxConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_observability_event(self, param):
-        # Implement the handler here
-        # use self.save_progress(...) to send progress messages back to the platform
+        
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
 
         headers = self._headers
@@ -415,7 +414,6 @@ class SignalfxConnector(BaseConnector):
         if action_id == 'test_connectivity':
             ret_val = self._handle_test_connectivity(param)
 
-        # myNote: Copy these 2 lines for any new action and replace action_id with action as stated in JSON file...
         elif action_id == 'run_query':
             ret_val = self._handle_run_query(param)
 
@@ -440,7 +438,7 @@ class SignalfxConnector(BaseConnector):
         # get the asset config
         config = self.get_config()
 
-        self._base_url = config['base_url'].strip("/")  # myNote: get from siglalfx.json
+        self._base_url = config['base_url'].strip("/")
         self._token = config['token']
         self._headers = {
             'X-SF-TOKEN': self._token
