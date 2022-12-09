@@ -83,6 +83,9 @@
                     "example_values": [
                         "aws_region:region_name"
                     ],
+                    "contains": [
+                        "signalfx query"
+                    ],
                     "column_name": "Query",
                     "column_order": 0
                 },
@@ -535,6 +538,9 @@
                 {
                     "data_path": "action_result.parameter.incidentid",
                     "data_type": "string",
+                    "contains": [
+                        "signalfx incidentid"
+                    ],
                     "column_name": "Incident ID",
                     "column_order": 0,
                     "example_values": [
@@ -619,6 +625,9 @@
                 {
                     "data_path": "action_result.parameter.incidentid",
                     "data_type": "string",
+                    "contains": [
+                        "signalfx incidentid"
+                    ],
                     "example_values": [
                         "Et6d4doAIAg"
                     ]
