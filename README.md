@@ -2,11 +2,11 @@
 # SignalFx
 
 Publisher: Splunk  
-Connector Version: 1\.0\.9  
+Connector Version: 1\.1\.0  
 Product Vendor: Splunk  
 Product Name: SignalFx  
 Product Version Supported (regex): "\.\*"  
-Minimum Product Version: 5\.1\.0  
+Minimum Product Version: 5\.3\.5  
 
 This App uses the Splunk Infrastructure Monitoring \(SignalFx\) API to retrieve and send data
 
@@ -27,6 +27,31 @@ This App uses the Splunk Infrastructure Monitoring \(SignalFx\) API to retrieve 
     to get the token
 8.  Copy the generated token and use it in 'Access Token' asset configuration parameter
 
+## Event Dimensions
+
+-   When crafting your Event Dimensions keep in mind:
+
+      
+
+    1.  Must be valid JSON
+    2.  When running the action using datapaths in modern playbook, curly bracket characters that
+        are not datapath references must be escaped with an additional curly bracket. E.G. { becomes
+        {{  
+        Example Dimensions Input: {{\\"description\\":\\"{0}\\",\\"tag\\":\\"{1}\\"}}  
+        where {0} and {1} represent datapaths.
+
+-   Dimension key criteria:
+
+      
+
+    1.  Maximum length can be 128 characters
+    2.  Must start with an uppercase or lowercase letter
+    3.  After the first character, the name can contain letters, numbers, underscores (\_), and
+        hyphens (-)
+    4.  Spaces in dimension keys are not allowed
+    5.  If the dimension key does not match the criteria then the action may pass but event will not
+        be created on SignalFx portal
+
 
 ### Configuration Variables
 The below configuration variables are required for this Connector to operate.  These variables are specified when configuring a SignalFx asset in SOAR.
@@ -39,6 +64,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 ### Supported Actions  
 [test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration  
 [run query](#action-run-query) - Retrieves dimensions based on a query  
+[create observability event](#action-create-observability-event) - POST an event to Splunk observability containing any selected fields from SOAR  
 [clear incident](#action-clear-incident) - Clears a specified incident  
 [get incident](#action-get-incident) - Get details of a specified incident  
 [list incidents](#action-list-incidents) - List all incidents  
@@ -70,7 +96,6 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
 action\_result\.parameter\.query | string |  `signalfx query` 
-action\_result\.data | string |  `signalfx data` 
 action\_result\.data\.\*\.count | numeric | 
 action\_result\.data\.\*\.results\.\*\.key | string | 
 action\_result\.data\.\*\.results\.\*\.value | string | 
@@ -121,6 +146,29 @@ action\_result\.summary\.total\_results | numeric |
 summary\.total\_objects | numeric | 
 summary\.total\_objects\_successful | numeric |   
 
+## action: 'create observability event'
+POST an event to Splunk observability containing any selected fields from SOAR
+
+Type: **generic**  
+Read only: **False**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**title** |  required  | Title of your Splunk Observability Event | string | 
+**dimensions** |  optional  | A set of key\-value pairs defining event definitions | string | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS
+--------- | ---- | --------
+action\_result\.parameter\.title | string | 
+action\_result\.parameter\.dimensions | string | 
+action\_result\.data | string | 
+action\_result\.status | string | 
+action\_result\.message | string | 
+summary\.total\_objects | numeric | 
+summary\.total\_objects\_successful | numeric |   
+
 ## action: 'clear incident'
 Clears a specified incident
 
@@ -138,7 +186,6 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
 action\_result\.parameter\.incidentid | string |  `signalfx incidentid` 
-action\_result\.data | string |  `signalfx data` 
 action\_result\.data\.\*\.code | numeric | 
 action\_result\.data\.\*\.message | string | 
 action\_result\.status | string | 
@@ -164,7 +211,31 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
 action\_result\.parameter\.incidentid | string |  `signalfx incidentid` 
-action\_result\.data | string |  `signalfx data` 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.device | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.host\.id | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.os\.type | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.direction | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.host\.name | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.sf\_metric | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.cloud\.region | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.azure\.vm\.size | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.cloud\.platform | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.cloud\.provider | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.cloud\.account\.id | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.azure\_resource\_id | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.azure\.resourcegroup\.name | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S7\.value | string | 
+action\_result\.data\.\*\.events\.\*\.linkedTeams | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S1\.key\.host\.id | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S1\.key\.os\.type | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S1\.key\.host\.name | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S1\.key\.cloud\.region | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S1\.key\.azure\.vm\.size | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S1\.key\.cloud\.platform | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S1\.key\.cloud\.provider | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S1\.key\.cloud\.account\.id | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S1\.key\.azure\_resource\_id | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S1\.key\.azure\.resourcegroup\.name | string | 
 action\_result\.data\.\*\.severity | string | 
 action\_result\.data\.\*\.active | boolean | 
 action\_result\.data\.\*\.anomalyState | string | 
@@ -212,7 +283,7 @@ List all incidents
 Type: **investigate**  
 Read only: **True**
 
-This action can return incidents up to index 10000\.
+This action can return incidents up to index 10000\. If limit parameter is not provided then 100 will be taken as default value\.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
@@ -225,7 +296,40 @@ DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
 action\_result\.parameter\.include\_resolved | boolean | 
 action\_result\.parameter\.limit | numeric | 
-action\_result\.data | string |  `signalfx data` 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.device | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.host\.id | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.os\.type | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.direction | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.host\.name | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.sf\_metric | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.cloud\.region | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.azure\.vm\.size | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.cloud\.platform | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.cloud\.provider | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.cloud\.account\.id | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.azure\_resource\_id | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.azure\.resourcegroup\.name | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S4\.value | string | 
+action\_result\.data\.\*\.events\.\*\.linkedTeams | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S1\.key\.mode | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S1\.key\.type | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S1\.key\.device | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S1\.key\.host\.id | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S1\.key\.os\.type | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S1\.key\.host\.name | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S1\.key\.mountpoint | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S1\.key\.cloud\.region | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S1\.key\.azure\.vm\.size | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S1\.key\.cloud\.platform | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S1\.key\.cloud\.provider | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S1\.key\.cloud\.account\.id | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S1\.key\.azure\_resource\_id | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S1\.key\.azure\.resourcegroup\.name | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S1\.key\.direction | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S7\.value | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S3\.key\.state | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S6\.value | string | 
+action\_result\.data\.\*\.events\.\*\.inputs\.\_S5\.value | string | 
 action\_result\.data\.\*\.incidentId | string |  `signalfx incidentid` 
 action\_result\.data\.\*\.severity | string | 
 action\_result\.data\.\*\.active | boolean | 
