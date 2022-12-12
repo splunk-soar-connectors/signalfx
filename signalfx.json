@@ -12,7 +12,7 @@
     "product_version_regex": ".*",
     "publisher": "Splunk",
     "latest_tested_versions": [
-        "Cloud, API api.eu0.signalfx.com, March 25, 2021"
+        "Cloud, API api.us2.signalfx.com, December 7, 2022"
     ],
     "contributors": [
         {
@@ -20,14 +20,17 @@
         },
         {
             "name": "Angelo Brancato"
+        },
+        {
+            "name": "Jeremy Hicks"
         }
     ],
     "license": "Copyright (c) 2021-2022 Splunk Inc.",
-    "app_version": "1.0.9",
-    "utctime_updated": "2022-01-31T19:47:39.000000Z",
+    "app_version": "1.1.0",
+    "utctime_updated": "2022-11-08T19:47:39.000000Z",
     "package_name": "phantom_signalfx",
     "main_module": "signalfx_connector.py",
-    "min_phantom_version": "5.1.0",
+    "min_phantom_version": "5.3.5",
     "app_wizard_version": "1.0.0",
     "configuration": {
         "base_url": {
@@ -85,13 +88,6 @@
                     ],
                     "column_name": "Query",
                     "column_order": 0
-                },
-                {
-                    "data_path": "action_result.data",
-                    "data_type": "string",
-                    "contains": [
-                        "signalfx data"
-                    ]
                 },
                 {
                     "data_path": "action_result.data.*.count",
@@ -241,7 +237,7 @@
                     "data_path": "action_result.data.*.results.*.customProperties.aws_public_dns_name",
                     "data_type": "string",
                     "example_values": [
-                        "ec2-52-27-24-63.us-west-2.compute.amazonaws.com"
+                        "ec2-52-27-24-63.us-west-2.compute.test.com"
                     ]
                 },
                 {
@@ -367,7 +363,7 @@
                     "data_path": "action_result.data.*.results.*.customProperties.aws_queue_url",
                     "data_type": "string",
                     "example_values": [
-                        "https://sqs.us-west-2.amazonaws.com/102730102752/cloud-attackrange-trail-SQS-Deadletter"
+                        "https://sqs.us-west-2.test.com/102730102752/cloud-attackrange-trail-SQS-Deadletter"
                     ]
                 },
                 {
@@ -443,6 +439,83 @@
             "versions": "EQ(*)"
         },
         {
+            "action": "create observability event",
+            "identifier": "observability_event",
+            "description": "POST an event to Splunk observability containing any selected fields from SOAR",
+            "type": "generic",
+            "read_only": false,
+            "parameters": {
+                "title": {
+                    "description": "Title of your Splunk Observability Event",
+                    "data_type": "string",
+                    "order": 0,
+                    "required": true,
+                    "name": "title"
+                },
+                "dimensions": {
+                    "description": "A set of key-value pairs defining event definitions",
+                    "data_type": "string",
+                    "order": 1,
+                    "name": "dimensions"
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.title",
+                    "data_type": "string",
+                    "example_values": [
+                        "test"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.dimensions",
+                    "data_type": "string",
+                    "example_values": [
+                        "{\"description\": \"test description\", \"tag\": \"test\"}"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 0,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Observability event sent"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
             "action": "clear incident",
             "description": "Clears a specified incident",
             "verbose": "This action clears (resolves) a specific incident that is identified by the parameter incidentid.",
@@ -472,13 +545,6 @@
                     "column_order": 0,
                     "example_values": [
                         "Et6d4doAIAg"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data",
-                    "data_type": "string",
-                    "contains": [
-                        "signalfx data"
                     ]
                 },
                 {
@@ -567,10 +633,175 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data",
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.device",
                     "data_type": "string",
-                    "contains": [
-                        "signalfx data"
+                    "example_values": [
+                        "C:"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.host.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "e3d18363-806f-4d19-9b75-9ec2f5953cd4"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.os.type",
+                    "data_type": "string",
+                    "example_values": [
+                        "windows"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.direction",
+                    "data_type": "string",
+                    "example_values": [
+                        "read"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.host.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "test"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.sf_metric",
+                    "data_type": "string",
+                    "example_values": [
+                        "system.disk.operations"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.cloud.region",
+                    "data_type": "string",
+                    "example_values": [
+                        "eastus"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.azure.vm.size",
+                    "data_type": "string",
+                    "example_values": [
+                        "Standard_B2s"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.cloud.platform",
+                    "data_type": "string",
+                    "example_values": [
+                        "azure_vm"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.cloud.provider",
+                    "data_type": "string",
+                    "example_values": [
+                        "azure"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.cloud.account.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "4c357906-xxxx-aaaa-98aa-180d9a85aaaa"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.azure_resource_id",
+                    "data_type": "string",
+                    "example_values": [
+                        "4c357906-xxxx-aaaa-98aa-180d9a85aaaa/pluginframework/test.compute/virtualmachines/test"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.azure.resourcegroup.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "PLUGINFRAMEWORK"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S7.value",
+                    "data_type": "string",
+                    "example_values": [
+                        "5"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.linkedTeams",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S1.key.host.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "e3d18363-xxxx-4d19-9b75-9ec2f5953aaa"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S1.key.os.type",
+                    "data_type": "string",
+                    "example_values": [
+                        "windows"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S1.key.host.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "test"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S1.key.cloud.region",
+                    "data_type": "string",
+                    "example_values": [
+                        "eastus"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S1.key.azure.vm.size",
+                    "data_type": "string",
+                    "example_values": [
+                        "Standard_B2s"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S1.key.cloud.platform",
+                    "data_type": "string",
+                    "example_values": [
+                        "azure_vm"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S1.key.cloud.provider",
+                    "data_type": "string",
+                    "example_values": [
+                        "azure"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S1.key.cloud.account.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "4c357906-xxxx-aaaa-98aa-180d9a85aaaa"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S1.key.azure_resource_id",
+                    "data_type": "string",
+                    "example_values": [
+                        "4c357906-xxxx-aaaa-98aa-180d9a85aaaa/pluginframework/test.compute/virtualmachines/test"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S1.key.azure.resourcegroup.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "PLUGINFRAMEWORK"
                     ]
                 },
                 {
@@ -872,7 +1103,7 @@
         {
             "action": "list incidents",
             "description": "List all incidents",
-            "verbose": "This action can return incidents up to index 10000.",
+            "verbose": "This action can return incidents up to index 10000. If limit parameter is not provided then 100 will be taken as default value.",
             "type": "investigate",
             "identifier": "list_incidents",
             "read_only": true,
@@ -903,10 +1134,238 @@
                     "data_type": "numeric"
                 },
                 {
-                    "data_path": "action_result.data",
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.device",
                     "data_type": "string",
-                    "contains": [
-                        "signalfx data"
+                    "example_values": [
+                        "Ethernet"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.host.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "e3d18363-xxxx-4d19-9b75-9ec2f5953aaa"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.os.type",
+                    "data_type": "string",
+                    "example_values": [
+                        "windows"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.direction",
+                    "data_type": "string",
+                    "example_values": [
+                        "transmit"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.host.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "test"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.sf_metric",
+                    "data_type": "string",
+                    "example_values": [
+                        "system.network.io"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.cloud.region",
+                    "data_type": "string",
+                    "example_values": [
+                        "eastus"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.azure.vm.size",
+                    "data_type": "string",
+                    "example_values": [
+                        "Standard_B2s"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.cloud.platform",
+                    "data_type": "string",
+                    "example_values": [
+                        "azure_vm"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.cloud.provider",
+                    "data_type": "string",
+                    "example_values": [
+                        "azure"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.cloud.account.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "4c357906-xxxx-aaaa-98aa-180d9a85aaaa"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.azure_resource_id",
+                    "data_type": "string",
+                    "example_values": [
+                        "4c357906-xxxx-aaaa-98aa-180d9a85aaaa/pluginframework/test.compute/virtualmachines/test"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.azure.resourcegroup.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "PLUGINFRAMEWORK"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S4.value",
+                    "data_type": "string",
+                    "example_values": [
+                        "0"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.linkedTeams",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S1.key.mode",
+                    "data_type": "string",
+                    "example_values": [
+                        "rw"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S1.key.type",
+                    "data_type": "string",
+                    "example_values": [
+                        "NTFS"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S1.key.device",
+                    "data_type": "string",
+                    "example_values": [
+                        "C:"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S1.key.host.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "e3d18363-xxxx-4d19-9b75-9ec2f5953aaa"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S1.key.os.type",
+                    "data_type": "string",
+                    "example_values": [
+                        "windows"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S1.key.host.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "test"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S1.key.mountpoint",
+                    "data_type": "string",
+                    "example_values": [
+                        "C:"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S1.key.cloud.region",
+                    "data_type": "string",
+                    "example_values": [
+                        "eastus"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S1.key.azure.vm.size",
+                    "data_type": "string",
+                    "example_values": [
+                        "Standard_B2s"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S1.key.cloud.platform",
+                    "data_type": "string",
+                    "example_values": [
+                        "azure_vm"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S1.key.cloud.provider",
+                    "data_type": "string",
+                    "example_values": [
+                        "azure"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S1.key.cloud.account.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "4c357906-xxxx-aaaa-98aa-180d9a85aaaa"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S1.key.azure_resource_id",
+                    "data_type": "string",
+                    "example_values": [
+                        "4c357906-xxxx-aaaa-98aa-180d9a85aaaa/pluginframework/test.compute/virtualmachines/test"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S1.key.azure.resourcegroup.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "PLUGINFRAMEWORK"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S1.key.direction",
+                    "data_type": "string",
+                    "example_values": [
+                        "receive"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S7.value",
+                    "data_type": "string",
+                    "example_values": [
+                        "5"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S3.key.state",
+                    "data_type": "string",
+                    "example_values": [
+                        "free"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S6.value",
+                    "data_type": "string",
+                    "example_values": [
+                        "0"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.events.*.inputs._S5.value",
+                    "data_type": "string",
+                    "example_values": [
+                        "50"
                     ]
                 },
                 {
@@ -1213,31 +1672,31 @@
         "wheel": [
             {
                 "module": "beautifulsoup4",
-                "input_file": "wheels/beautifulsoup4-4.9.1-py3-none-any.whl"
+                "input_file": "wheels/py3/beautifulsoup4-4.9.1-py3-none-any.whl"
             },
             {
                 "module": "certifi",
-                "input_file": "wheels/certifi-2021.10.8-py2.py3-none-any.whl"
+                "input_file": "wheels/py3/certifi-2022.12.7-py3-none-any.whl"
             },
             {
                 "module": "chardet",
-                "input_file": "wheels/chardet-3.0.4-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/chardet-3.0.4-py2.py3-none-any.whl"
             },
             {
                 "module": "idna",
-                "input_file": "wheels/idna-2.10-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/idna-2.10-py2.py3-none-any.whl"
             },
             {
                 "module": "requests",
-                "input_file": "wheels/requests-2.25.0-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/requests-2.25.0-py2.py3-none-any.whl"
             },
             {
                 "module": "soupsieve",
-                "input_file": "wheels/soupsieve-2.3.1-py3-none-any.whl"
+                "input_file": "wheels/py3/soupsieve-2.3.2.post1-py3-none-any.whl"
             },
             {
                 "module": "urllib3",
-                "input_file": "wheels/urllib3-1.26.8-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/urllib3-1.26.13-py2.py3-none-any.whl"
             }
         ]
     }
