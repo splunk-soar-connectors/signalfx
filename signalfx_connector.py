@@ -265,6 +265,10 @@ class SignalfxConnector(BaseConnector):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
 
         headers = self._headers
+        headers.update({
+            'Content-Type': 'application/json'
+        })
+        
         dimensions = param.get('dimensions')
         title = param.get('title')
 
