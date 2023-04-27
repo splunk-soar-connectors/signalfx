@@ -11,7 +11,7 @@ Minimum Product Version: 5\.3\.5
 This App uses the Splunk Infrastructure Monitoring \(SignalFx\) API to retrieve and send data
 
 [comment]: # " File: README.md"
-[comment]: # "  Copyright (c) 2021-2022 Splunk Inc."
+[comment]: # "  Copyright (c) 2021-2023 Splunk Inc."
 [comment]: # ""
 [comment]: # "  Licensed under Apache 2.0 (https://www.apache.org/licenses/LICENSE-2.0.txt)"
 [comment]: # ""
