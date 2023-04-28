@@ -268,7 +268,7 @@ class SignalfxConnector(BaseConnector):
         headers.update({
             'Content-Type': 'application/json'
         })
-        
+
         dimensions = param.get('dimensions')
         title = param.get('title')
 
