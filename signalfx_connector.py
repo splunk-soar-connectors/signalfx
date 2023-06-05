@@ -1,6 +1,6 @@
 # File: signalfx_connector.py
 #
-# Copyright (c) 2021-2022 Splunk Inc.
+# Copyright (c) 2021-2023 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -265,6 +265,10 @@ class SignalfxConnector(BaseConnector):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
 
         headers = self._headers
+        headers.update({
+            'Content-Type': 'application/json'
+        })
+
         dimensions = param.get('dimensions')
         title = param.get('title')
 
