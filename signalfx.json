@@ -25,12 +25,12 @@
             "name": "Jeremy Hicks"
         }
     ],
-    "license": "Copyright (c) 2021-2023 Splunk Inc.",
+    "license": "Copyright (c) 2021-2025 Splunk Inc.",
     "app_version": "1.2.0",
     "utctime_updated": "2022-11-08T19:47:39.000000Z",
     "package_name": "phantom_signalfx",
     "main_module": "signalfx_connector.py",
-    "min_phantom_version": "6.0.0",
+    "min_phantom_version": "6.3.0",
     "app_wizard_version": "1.0.0",
     "configuration": {
         "base_url": {
@@ -1671,16 +1671,7 @@
         }
     ],
     "pip_dependencies": {
-        "wheel": [
-            {
-                "module": "beautifulsoup4",
-                "input_file": "wheels/py3/beautifulsoup4-4.9.1-py3-none-any.whl"
-            },
-            {
-                "module": "soupsieve",
-                "input_file": "wheels/py3/soupsieve-2.3.2.post1-py3-none-any.whl"
-            }
-        ]
+        "wheel": []
     },
     "pip39_dependencies": {
         "wheel": [
