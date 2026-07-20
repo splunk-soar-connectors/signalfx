@@ -1,7 +1,7 @@
 # SignalFx
 
 Publisher: Splunk <br>
-Connector Version: 1.2.3 <br>
+Connector Version: 1.2.4 <br>
 Product Vendor: Splunk <br>
 Product Name: SignalFx <br>
 Minimum Product Version: 6.3.0
