@@ -1,6 +1,6 @@
 # File: signalfx_connector.py
 #
-# Copyright (c) 2021-2025 Splunk Inc.
+# Copyright (c) 2021-2026 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 #
 
 import json
+from urllib.parse import quote
 
 # Phantom App imports
 import phantom.app as phantom
@@ -188,7 +189,7 @@ class SignalfxConnector(BaseConnector):
             url = f"{self._base_url}{endpoint}"
 
         try:
-            r = request_func(url, verify=config.get("verify_server_cert", False), **kwargs)
+            r = request_func(url, verify=config.get("verify_server_cert", True), **kwargs)
         except requests.exceptions.InvalidSchema:
             error_message = f"Error connecting to server. No connection adapters were found for {url}"
             return RetVal(action_result.set_status(phantom.APP_ERROR, error_message), resp_json)
@@ -283,7 +284,7 @@ class SignalfxConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        endpoint = "{}{}{}".format("/v2/incident/", param["incidentid"], "/clear")
+        endpoint = "{}{}{}".format("/v2/incident/", quote(str(param["incidentid"]), safe=""), "/clear")
         ret_val, response = self._make_rest_call(endpoint, action_result, method="put", headers=self._headers)
 
         if phantom.is_fail(ret_val):
@@ -298,7 +299,7 @@ class SignalfxConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        endpoint = "{}{}".format("/v2/incident/", param["incidentid"])
+        endpoint = "{}{}".format("/v2/incident/", quote(str(param["incidentid"]), safe=""))
         ret_val, response = self._make_rest_call(endpoint, action_result, headers=self._headers)
 
         if phantom.is_fail(ret_val):

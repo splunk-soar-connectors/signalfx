@@ -1,10 +1,10 @@
 # SignalFx
 
-Publisher: Splunk \
-Connector Version: 1.2.3 \
-Product Vendor: Splunk \
-Product Name: SignalFx \
-Minimum Product Version: 6.0.0
+Publisher: Splunk <br>
+Connector Version: 1.2.3 <br>
+Product Vendor: Splunk <br>
+Product Name: SignalFx <br>
+Minimum Product Version: 6.3.0
 
 This App uses the Splunk Infrastructure Monitoring (SignalFx) API to retrieve and send data
 
@@ -16,21 +16,22 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 -------- | -------- | ---- | -----------
 **base_url** | required | string | Splunk Infrastructure Monitoring (SignalFx) URL |
 **token** | required | password | Go to SignalFx My Profile -> Access Tokens |
+**verify_server_cert** | optional | boolean | Verify server certificate |
 
 ### Supported Actions
 
-[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration \
-[run query](#action-run-query) - Retrieves dimensions based on a query \
-[create observability event](#action-create-observability-event) - POST an event to Splunk observability containing any selected fields from SOAR \
-[clear incident](#action-clear-incident) - Clears a specified incident \
-[get incident](#action-get-incident) - Get details of a specified incident \
+[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration <br>
+[run query](#action-run-query) - Retrieves dimensions based on a query <br>
+[create observability event](#action-create-observability-event) - POST an event to Splunk observability containing any selected fields from SOAR <br>
+[clear incident](#action-clear-incident) - Clears a specified incident <br>
+[get incident](#action-get-incident) - Get details of a specified incident <br>
 [list incidents](#action-list-incidents) - List all incidents
 
 ## action: 'test connectivity'
 
 Validate the asset configuration for connectivity using supplied configuration
 
-Type: **test** \
+Type: **test** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -45,7 +46,7 @@ No Output
 
 Retrieves dimensions based on a query
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -113,7 +114,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 POST an event to Splunk observability containing any selected fields from SOAR
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -140,7 +141,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Clears a specified incident
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 This action clears (resolves) a specific incident that is identified by the parameter incidentid.
@@ -168,7 +169,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get details of a specified incident
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 This action pulls details of a specific incident that is identified by the parameter incidentid.
@@ -254,7 +255,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 List all incidents
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 This action can return incidents up to index 10000. If limit parameter is not provided then 100 will be taken as default value.
@@ -351,7 +352,7 @@ ______________________________________________________________________
 
 Auto-generated Splunk SOAR Connector documentation.
 
-Copyright 2025 Splunk Inc.
+Copyright 2026 Splunk Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
