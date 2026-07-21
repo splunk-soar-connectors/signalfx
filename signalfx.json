@@ -26,8 +26,8 @@
         }
     ],
     "license": "Copyright (c) 2021-2026 Splunk Inc.",
-    "app_version": "1.2.4",
-    "utctime_updated": "2026-07-20T18:13:45.686555Z",
+    "app_version": "1.2.5",
+    "utctime_updated": "2026-07-21T13:58:29.688601Z",
     "package_name": "phantom_signalfx",
     "main_module": "signalfx_connector.py",
     "min_phantom_version": "6.3.0",
