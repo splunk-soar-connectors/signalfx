@@ -26,8 +26,10 @@
           <ol>
             <li>Must be valid JSON</li>
             <li>
-            When running the action using datapaths in modern playbook, curly bracket characters that are not datapath references must be escaped with an additional curly bracket. E.G. { becomes {{</li>
-            <br>Example Dimensions Input: {{\"description\":\"{0}\",\"tag\":\"{1}\"}}
+              When running the action using datapaths in modern playbook, curly bracket characters that are not datapath references must be escaped with an additional curly bracket. E.G. &#123; becomes &#123;&#123;
+            </li>
+            <br>
+            Example Dimensions Input: &#123;&#123;\"description\":\"&#123;0&#125;\",\"tag\":\"&#123;1&#125;\"&#125;&#125;
             <br>
             where {0} and {1} represent datapaths.
           </ol>
