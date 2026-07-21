@@ -210,7 +210,7 @@ class SignalfxConnector(BaseConnector):
         self.save_progress("Connecting to endpoint")
 
         # make rest call
-        ret_val, response = self._make_rest_call("/v2/dimension", action_result, params=None, headers=self._headers)
+        ret_val, _response = self._make_rest_call("/v2/dimension", action_result, params=None, headers=self._headers)
 
         if phantom.is_fail(ret_val):
             self.save_progress("Test Connectivity Failed")
@@ -226,18 +226,42 @@ class SignalfxConnector(BaseConnector):
 
         query_string = param["query"]
 
-        params = {"query": query_string}
+        params = {"query": query_string, "limit": PAGE_SIZE, "offset": 0}
+        dimensions = []
+        response = {}
 
-        ret_val, response = self._make_rest_call("/v2/dimension", action_result, params=params, headers=self._headers)
+        while True:
+            ret_val, page = self._make_rest_call("/v2/dimension", action_result, params=params.copy(), headers=self._headers)
+            if phantom.is_fail(ret_val):
+                return action_result.get_status()
 
-        if phantom.is_fail(ret_val):
-            return action_result.get_status()
+            if not isinstance(page, dict) or not isinstance(page.get("results", []), list):
+                return action_result.set_status(phantom.APP_ERROR, "Failed to parse the dimension search response")
+
+            if not response:
+                response = page.copy()
+
+            page_results = page.get("results", [])
+            dimensions.extend(page_results)
+
+            try:
+                total_results = int(page.get("count", len(dimensions)))
+            except (TypeError, ValueError):
+                return action_result.set_status(phantom.APP_ERROR, "Failed to parse the dimension result count")
+
+            if not page_results or len(dimensions) >= total_results:
+                break
+
+            params["offset"] += len(page_results)
+
+        response["results"] = dimensions
+        response["count"] = len(dimensions)
 
         # Add the response into the data section
         action_result.add_data(response)
 
         summary = action_result.update_summary({})
-        summary["total_results"] = response.get("count", 0)
+        summary["total_results"] = len(dimensions)
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
