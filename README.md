@@ -344,6 +344,7 @@ action_result.data.\*.severity | string | | Critical |
 action_result.data.\*.triggeredNotificationSent | boolean | | True False |
 action_result.data.\*.triggeredWhileMuted | boolean | | True False |
 action_result.summary.total_incidents | numeric | | 1 |
+action_result.summary.truncated | boolean | | True False |
 action_result.message | string | | Total incidents: 1 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |

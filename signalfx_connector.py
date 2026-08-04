@@ -335,6 +335,7 @@ class SignalfxConnector(BaseConnector):
 
     def _paginator(self, action_result, user_limit, params, offset=0):
         incident_list = list()
+        truncated = False
 
         while True:
             params["limit"] = PAGE_SIZE
@@ -342,27 +343,26 @@ class SignalfxConnector(BaseConnector):
 
             ret_val, response = self._make_rest_call("/v2/incident", action_result, headers=self._headers, params=params)
             if phantom.is_fail(ret_val):
-                return RetVal(action_result.get_status(), None)
+                return action_result.get_status(), None, False
 
             if not response:
-                return RetVal(phantom.APP_SUCCESS, incident_list)
+                return phantom.APP_SUCCESS, incident_list, False
 
             try:
                 incident_list.extend(response)
             except Exception:
-                return RetVal(action_result.set_status(phantom.APP_ERROR, "Failed to parse the response"), None)
+                return action_result.set_status(phantom.APP_ERROR, "Failed to parse the response"), None, False
 
             if len(incident_list) >= user_limit:
-                return RetVal(phantom.APP_SUCCESS, incident_list[:user_limit])
+                return phantom.APP_SUCCESS, incident_list[:user_limit], False
 
             offset += PAGE_SIZE
-            """
-            This is because the API currently returns a '500' error when queried for an alert with index value greater than 10000
-            """
+            # SignalFx returns at most 10,000 incidents for this endpoint.
             if offset + PAGE_SIZE > 10000:
+                truncated = True
                 break
 
-        return RetVal(phantom.APP_SUCCESS, incident_list)
+        return phantom.APP_SUCCESS, incident_list, truncated
 
     def _handle_list_incidents(self, param):
         self.save_progress(f"In action handler for: {self.get_action_identifier()}")
@@ -377,7 +377,7 @@ class SignalfxConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        ret_val, incident_list = self._paginator(action_result, limit, params)
+        ret_val, incident_list, truncated = self._paginator(action_result, limit, params)
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
@@ -393,6 +393,12 @@ class SignalfxConnector(BaseConnector):
 
         summary = action_result.update_summary({})
         summary["total_incidents"] = count
+        summary["truncated"] = truncated
+        if truncated:
+            return action_result.set_status(
+                phantom.APP_SUCCESS,
+                f"Results truncated at the SignalFx API's 10,000-incident retrieval cap: returned {count} of the requested {limit} incidents",
+            )
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def handle_action(self, param):
